@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: 5001
+      DB_HOST: mediversalapp.cr88skaoqifv.ap-south-1.rds.amazonaws.com
+      DB_USER: HIMS
+      DB_PASS: PatnaHIMS
+      DB_NAME: mediversal_hims
+
