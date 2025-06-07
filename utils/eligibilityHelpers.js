@@ -3,7 +3,7 @@ const moment = require('moment');
 
 class EligibilityHelpers {
     // Now accepts 'user' (for birthday) and 'userMeta' (for order history)
-    static async checkCouponEligibility(coupon, user, userMeta, userCouponUsage) {
+    static async checkCouponEligibility(coupon, birthday, userMeta, userCouponUsage) {
         const today = moment();
 
         // 1. Basic Coupon Validity Checks
@@ -17,7 +17,7 @@ class EligibilityHelpers {
         }
 
         // Ensure user and userMeta exist for history-based eligibility checks
-        if (!user || !userMeta) {
+        if (!birthday || !userMeta) {
             // If either user or userMeta is missing, only general coupons (without history-based rules) are eligible
             return coupon.is_general_coupon;
         }
@@ -38,8 +38,8 @@ class EligibilityHelpers {
                 return loyalDaysSinceLastOrder >= 60;
             case 'BIRTHDAY':
                 // Access birthday directly from the 'user' object
-                if (!user.birthday) return false;
-                const userBirthday = moment(user.birthday);
+                if (!birthday) return false;
+                const userBirthday = moment(birthday);
                 return userBirthday.date() === today.date() && userBirthday.month() === today.month();
             case 'GENERAL':
                 return true;

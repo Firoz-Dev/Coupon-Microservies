@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const AdminCouponController = require('../../controllers/admin/coupon.controller');
 
-
 // Admin authentication middleware (you'll need to implement this)
 // const authenticateAdmin = (req, res, next) => {
 //     // For demonstration, we'll assume adminId is directly in req.body for now.

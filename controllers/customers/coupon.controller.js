@@ -10,21 +10,17 @@ const db = require('../../config/db');
 class ClientCouponController {
 
     static async getEligibleCoupons(req, res) {
-        const { userId, cartTotal } = req.body;
+        const { userId, cartTotal,birthday} = req.body;
 
         if (!userId || !cartTotal) {
             return res.status(400).json({ message: 'User ID and Cart Total are required.' });
         }
 
         try {
-            // Fetch user basic data (including birthday) from users table
-            const user = await CustomerModel.getById(userId);
-            if (!user) {
-                 return res.status(404).json({ message: 'User not found.' });
-            }
-
+            
             // Fetch user coupon metadata from customer_coupon_meta table
             let userMeta = await CustomerCouponMetaModel.getByUserId(userId);
+            console.log("userMeta",userMeta)
             if (!userMeta) {
                  // If userMeta doesn't exist, create a basic entry for the user in customer_coupon_meta
                  // Birthday is not passed here as it comes from the users table
@@ -47,7 +43,7 @@ class ClientCouponController {
                 const currentUserCouponUsage = userCouponUsageMap.get(coupon.id) || { usage_count: 0, is_used_at_least_once: false };
 
                 // Pass both user (for birthday) and userMeta (for order stats) to eligibilityHelpers
-                const isEligible = await EligibilityHelpers.checkCouponEligibility(coupon, user, userMeta, currentUserCouponUsage);
+                const isEligible = await EligibilityHelpers.checkCouponEligibility(coupon, birthday, userMeta, currentUserCouponUsage);
 
                 if (isEligible) {
                     eligibleCoupons.push(coupon);
