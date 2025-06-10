@@ -22,7 +22,7 @@ class CouponModel {
                 is_for_first_time_user, is_for_comeback_user, is_for_loyal_user,
                 is_for_birthday_user, is_general_coupon,
                 is_for_new_customer, is_for_existing_customer
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const [result] = await db.execute(query, [
             coupon_name, coupon_code, discount_type, discount_value,
