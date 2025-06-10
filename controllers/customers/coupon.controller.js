@@ -2,7 +2,6 @@
 const CouponModel = require('../../models/couponModel');
 const CustomerCouponModel = require('../../models/customerCouponModel');
 const CustomerCouponMetaModel = require('../../models/customerCouponMetaModel'); 
-const CustomerModel = require('../../models/customerModel'); 
 const EligibilityHelpers = require('../../utils/eligibilityHelpers');
 const moment = require('moment');
 const db = require('../../config/db');
@@ -11,6 +10,7 @@ class ClientCouponController {
 
     static async getEligibleCoupons(req, res) {
         const { userId, cartTotal,birthday} = req.body;
+        console.log("getEligibleCoupons",userId,cartTotal,birthday)
 
         if (!userId || !cartTotal) {
             return res.status(400).json({ message: 'User ID and Cart Total are required.' });
