@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-class UserCouponModel {
+class CustomerCouponModel  {
     static async createOrUpdate(userId, couponId, connection = db) {
         // Use provided connection or default db
         const query = `
@@ -31,18 +31,29 @@ class UserCouponModel {
         return rows;
     }
 
-    // NEW: Function to decrement coupon usage
+ // NEW: Function to decrement coupon usage
+    // --- CHANGED HERE (from previous discussion, no new changes in this specific interaction) ---
     static async decrementUsage(userId, couponId, connection = db) {
         const query = `
             UPDATE customer_coupons
-            SET usage_count = GREATEST(0, usage_count - 1),
-                last_used_at = CASE WHEN usage_count - 1 = 0 THEN NULL ELSE last_used_at END,
-                is_used_at_least_once = CASE WHEN usage_count - 1 = 0 THEN FALSE ELSE TRUE END
+            SET 
+                usage_count = GREATEST(0, usage_count - 1),
+                -- If usage_count becomes 0 after decrement, set last_used_at to NULL.
+                -- Otherwise, keep it as is (do not update to NOW() as it's a refund, not a new usage).
+                last_used_at = CASE
+                                    WHEN usage_count - 1 = 0 THEN NULL
+                                    ELSE last_used_at
+                               END,
+                -- If usage_count becomes 0 after decrement, set is_used_at_least_once to FALSE.
+                is_used_at_least_once = CASE
+                                            WHEN usage_count - 1 = 0 THEN FALSE
+                                            ELSE TRUE
+                                        END
             WHERE user_id = ? AND coupon_id = ? AND usage_count > 0
         `;
         const [result] = await connection.execute(query, [userId, couponId]);
         return result.affectedRows > 0;
     }
-}
 
-module.exports = UserCouponModel;
+}
+module.exports = CustomerCouponModel ;

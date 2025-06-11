@@ -20,7 +20,6 @@ class ClientCouponController {
             
             // Fetch user coupon metadata from customer_coupon_meta table
             let userMeta = await CustomerCouponMetaModel.getByUserId(userId);
-            console.log("userMeta",userMeta)
             if (!userMeta) {
                  // If userMeta doesn't exist, create a basic entry for the user in customer_coupon_meta
                  // Birthday is not passed here as it comes from the users table
