@@ -3,6 +3,7 @@ const CouponModel = require('../../models/couponModel');
 class AdminCouponController {
     
     static async createCoupon(req, res) {
+        console.log("amdin coupon", req.body);
         try {
             const newCouponId = await CouponModel.create(req.body);
             res.status(201).json({ message: 'Coupon created successfully', couponId: newCouponId });
